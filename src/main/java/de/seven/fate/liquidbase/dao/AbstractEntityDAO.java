@@ -164,11 +164,7 @@ public class AbstractEntityDAO<E extends IdAble<I>, I> {
 
         E e = get(entity);
 
-        if (e == null) {
-            return;
-        }
-
-        em.remove(e);
+        Optional.of(e).ifPresent(em::remove);
     }
 
     public List<E> list() {

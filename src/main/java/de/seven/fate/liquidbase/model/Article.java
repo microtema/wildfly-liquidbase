@@ -5,6 +5,7 @@ import de.seven.fate.liquidbase.dao.IdAble;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import java.util.Objects;
 
 /**
  * Created by Mario on 26.03.2016.
@@ -63,5 +64,21 @@ public class Article implements IdAble<Long> {
 
     public void setUrn(String urn) {
         this.urn = urn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Objects.equals(name, article.name) &&
+                saison == article.saison &&
+                size == article.size &&
+                Objects.equals(urn, article.urn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, saison, size, urn);
     }
 }
