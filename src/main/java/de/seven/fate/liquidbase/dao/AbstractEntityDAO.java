@@ -2,7 +2,6 @@ package de.seven.fate.liquidbase.dao;
 
 import de.seven.fate.model.util.ClassUtil;
 import de.seven.fate.model.util.CollectionUtil;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.annotation.PostConstruct;
@@ -14,10 +13,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AbstractEntityDAO<E extends IdAble<I>, I> {
+public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityDAO.class.getName());
 
@@ -67,7 +65,18 @@ public class AbstractEntityDAO<E extends IdAble<I>, I> {
             return entity;
         }
 
+        return saveOrUpdateImpl(entity);
+    }
+
+    protected E saveOrUpdateImpl(E entity) {
+        Validate.notNull(entity, "entity should not be null");
+
         return saveOrUpdate(get(entity), entity);
+    }
+
+    public void saveOrUpdate(Collection<E> entities) {
+
+        Optional.ofNullable(entities).orElse(Collections.emptyList()).forEach(this::saveOrUpdateImpl);
     }
 
     protected E saveOrUpdate(E recent, E entity) {
@@ -80,23 +89,12 @@ public class AbstractEntityDAO<E extends IdAble<I>, I> {
             return recent;
         }
 
-        copyProperties(recent, entity);
+        updateProperties(recent, entity);
 
         return mergeImpl(recent);
     }
 
-    public void copyProperties(E recent, E entity) {
-        Validate.notNull(recent);
-        Validate.notNull(entity);
-
-        try {
-            BeanUtils.copyProperties(recent, entity);
-        } catch (Exception e) {
-
-            LOGGER.log(Level.WARNING, "unable to update properties from: " + entity + " to " + recent, e);
-            throw new IllegalStateException(e);
-        }
-    }
+    public abstract void updateProperties(E recent, E entity);
 
     protected E mergeImpl(E entity) {
         assert entity != null;
