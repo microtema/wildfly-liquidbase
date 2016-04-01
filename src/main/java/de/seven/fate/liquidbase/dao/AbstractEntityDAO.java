@@ -19,7 +19,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityDAO.class.getName());
 
-    @PersistenceContext(unitName = "liquidbase")
+    @PersistenceContext(unitName = "liquibase")
     protected EntityManager em;
 
     private Class<E> entityType;

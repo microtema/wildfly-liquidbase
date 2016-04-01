@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+                   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                   xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+    <changeSet id="001" author="7fate" runAlways="true" failOnError="true">
+        <sql>DELETE FROM article;</sql>
+    </changeSet>
+    <changeSet id="002" author="7fate" runAlways="true" failOnError="true">
+        <loadData tableName="ARTICLE"
+                  encoding="UTF-8"
+                  file="src/main/liquibase/changelog-insert-article.data"
+                  separator=";"
+                  quotchar='"'/>
+    </changeSet>
+    <changeSet id="003" author="7fate">
+        <dropColumn tableName="ARTICLE" columnName="foo"/>
+    </changeSet>
+    <changeSet id="004" author="7fate">
+        <dropColumn tableName="ARTICLE" columnName="bar"/>
+    </changeSet>
+</databaseChangeLog>

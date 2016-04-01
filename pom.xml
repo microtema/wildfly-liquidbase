@@ -93,6 +93,20 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${wildfly.maven.plugin.version}</version>
             </plugin>
+            <!-- liquibase -->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <changeLogFile>src/main/liquibase/changelog-master.xml</changeLogFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                    <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+                    <url>jdbc:sqlserver://localhost:1433;databaseName=liquidbase</url>
+                    <username>sa</username>
+                    <password>secret</password>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -239,9 +253,24 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.4.2</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>sqljdbc4</artifactId>
+            <version>4.0</version>
+        </dependency>
     </dependencies>
 
-    <description>This project is the server part of the Message Notification providing the generated a REST interface for data access.
+    <description>This project is the server part of the Message Notification providing the generated a REST interface
+        for data access.
     </description>
     <scm>
         <connection>scm:git:https://github.com/sevenfate/wildfly-liquidbase</connection>
