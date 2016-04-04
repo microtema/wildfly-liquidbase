@@ -3,9 +3,7 @@ package de.seven.fate.liquidbase.model;
 import de.seven.fate.liquidbase.dao.IdAble;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -15,14 +13,15 @@ import java.util.Objects;
 public class Article implements IdAble<Long> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Saison saison;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Size size;
 
     private String urn;

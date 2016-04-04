@@ -1,6 +1,7 @@
 package it.de.seven.fate.liquidbase.dao;
 
 import de.seven.fate.liquidbase.dao.ArticleDAO;
+import de.seven.fate.liquidbase.dao.PositionDAO;
 import de.seven.fate.liquidbase.model.Article;
 import de.seven.fate.liquidbase.model.builder.ArticleBuilder;
 import de.seven.fate.liquidbase.model.builder.annotations.Models;

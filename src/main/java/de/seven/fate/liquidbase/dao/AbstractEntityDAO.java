@@ -2,6 +2,7 @@ package de.seven.fate.liquidbase.dao;
 
 import de.seven.fate.model.util.ClassUtil;
 import de.seven.fate.model.util.CollectionUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.annotation.PostConstruct;
@@ -12,8 +13,11 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.logging.Logger;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
 
@@ -32,7 +36,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @param entity
      */
     public void save(E entity) {
-        Validate.notNull(entity, entityType + " should not be null");
+        notNull(entity, entityType + " should not be null");
 
         saveImpl(entity);
     }
@@ -57,7 +61,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @return entity
      */
     public E saveOrUpdate(E entity) {
-        Validate.notNull(entity, "entity should not be null");
+        notNull(entity, "entity should not be null");
 
         if (entity.getId() == null) {
             save(entity);
@@ -69,7 +73,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
     }
 
     protected E saveOrUpdateImpl(E entity) {
-        Validate.notNull(entity, "entity should not be null");
+        notNull(entity, "entity should not be null");
 
         return saveOrUpdate(get(entity), entity);
     }
@@ -80,7 +84,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
     }
 
     protected E saveOrUpdate(E recent, E entity) {
-        Validate.notNull(entity);
+        notNull(entity);
 
         if (recent == null) {
             save(entity);
@@ -107,7 +111,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @return founded entity or null
      */
     public E get(I id) {
-        Validate.notNull(id, entityType + "#id should not be null");
+        notNull(id, entityType + "#id should not be null");
 
         return em.find(entityType, id);
     }
@@ -116,7 +120,11 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @return founded entity by id or throw NoSuchEntityException
      */
     public E get(E entity) {
-        Validate.notNull(entity, entityType + " should not be null");
+        notNull(entity, entityType + " should not be null");
+
+        if (entity.getId() == null) {
+            return null;
+        }
 
         if (em.contains(entity)) {
             return entity;
@@ -129,7 +137,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @param entity
      */
     public void remove(E entity) {
-        Validate.notNull(entity, " entity should not be null");
+        notNull(entity, " entity should not be null");
 
         removeImpl(entity);
     }
@@ -140,7 +148,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
      * @param entityId
      */
     public void remove(I entityId) {
-        Validate.notNull(entityId, " entityId should not be null");
+        notNull(entityId, " entityId should not be null");
 
         removeImpl(get(entityId));
     }
@@ -179,6 +187,26 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
         return typedQuery.getResultList();
     }
 
+    public List<E> list(int startPosition, int maxResult) {
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+
+        CriteriaQuery<E> criteria = builder.createQuery(entityType);
+        Root<E> from = criteria.from(entityType);
+
+        criteria.select(from);
+
+        TypedQuery<E> query = em.createQuery(criteria);
+
+        query.setFirstResult(startPosition);
+       // query.setMaxResults(maxResult);
+
+        List<E> resultList = query.getResultList();
+        List<E> list = resultList.subList(0, Math.min(maxResult, resultList.size()));
+
+        return list;
+    }
+
     public Long count() {
 
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -192,7 +220,7 @@ public abstract class AbstractEntityDAO<E extends IdAble<I>, I> {
     }
 
     public Query createNamedQuery(String namedQuery, Object... params) {
-        Validate.notNull(namedQuery);
+        notNull(namedQuery);
 
         Query query = em.createNamedQuery(namedQuery);
 

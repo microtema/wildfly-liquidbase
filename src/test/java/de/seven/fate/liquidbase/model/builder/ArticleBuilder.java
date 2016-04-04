@@ -21,7 +21,11 @@ public class ArticleBuilder extends AbstractModelBuilder<Article> {
     @Override
     @Model(value = ModelType.MIN)
     public Article min() {
-        return super.min();
+
+        Article min = super.min();
+        min.setId(null);
+
+        return min;
     }
 
     @Produces

@@ -2,6 +2,8 @@ package de.seven.fate.liquidbase.model;
 
 import de.seven.fate.liquidbase.dao.IdAble;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -11,6 +13,7 @@ import javax.persistence.OneToOne;
 public class Order implements IdAble<Long> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

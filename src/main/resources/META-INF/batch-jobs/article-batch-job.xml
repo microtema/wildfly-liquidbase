@@ -1,0 +1,17 @@
+<job id="article-batch-job" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0">
+    <step id="job001" allow-start-if-complete="true">
+        <chunk item-count="100">
+            <reader ref="articleReader">
+                <properties>
+                    <property name="firstItem" value="#{partitionPlan['firstItem']}"/>
+                    <property name="numItems" value="#{partitionPlan['numItems']}"/>
+                </properties>
+            </reader>
+            <processor ref="articleProcessor"></processor>
+            <writer ref="positionWriter"></writer>
+        </chunk>
+        <partition>
+            <mapper ref="articleMapper"/>
+        </partition>
+    </step>
+</job>

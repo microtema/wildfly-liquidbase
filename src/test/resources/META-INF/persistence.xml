@@ -4,7 +4,7 @@
              xsi:schemaLocation="
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-   <persistence-unit name="liquidbase">
+   <persistence-unit name="liquibase">
       <!-- Use this jta-data-source if you're testing on Wildfly AS 10.0.0 (setup by test-ds.xml) -->
       <jta-data-source>jdbc/arquillian</jta-data-source>
 

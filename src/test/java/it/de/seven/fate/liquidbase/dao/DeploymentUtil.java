@@ -22,11 +22,11 @@ public final class DeploymentUtil {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackages(true, "de.seven.fate") //
                 .addClasses(classes) //
-                //.addClasses(BeanUtils.class, BeanUtilsBean.class) //
                 .addAsLibraries(DEPENDENCIES.resolve("org.apache.commons:commons-lang3").withTransitivity().asFile()) //
                 .addAsLibraries(DEPENDENCIES.resolve("de.seven.fate:model-builder").withTransitivity().asFile()) //
                 //.addAsLibraries(DEPENDENCIES.resolve("commons-beanutils:commons-beanutils").withTransitivity().asFile()) //
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml") //
+                .addAsResource("META-INF/batch-jobs/article-batch-job.xml", "META-INF/batch-jobs/article-batch-job.xml") //
                 .addAsWebInfResource("test-ds.xml") //
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml") //
                 .addAsWebInfResource("WEB-INF/web.xml", "web.xml");

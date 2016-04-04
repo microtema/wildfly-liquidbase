@@ -33,6 +33,8 @@ public class PositionBuilder extends AbstractModelBuilder<Position> {
 
         Position min = super.min();
 
+        min.setId(null);
+
         min.setArticles(articleBuilder.list());
 
         return min;
